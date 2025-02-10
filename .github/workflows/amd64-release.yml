@@ -27,12 +27,10 @@ jobs:
             image_name="${image//\//_}"
             image_name="${image_name//:/_}"
             docker save "${image}" -o "${image_name}.tar"
-            gzip -c "${image_name}.tar" > "${image_name}.tar.gz"
-            rm "${image_name}.tar"
+            gzip -f "${image_name}.tar"
           done
       - name: List generated files (debug step)
         run: |
-          echo "Preparing docker images list (.tar.gz) files:"
           find $GITHUB_WORKSPACE -name "*.tar.gz"
           # 上海时区
           release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Build')
@@ -41,7 +39,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ env.RELEASE_NAME }}
-          tag: Docker Images
+          tag: Docker-Images
           body: |
             ### Images
           artifacts: "${{ github.workspace }}/*.tar.gz"
