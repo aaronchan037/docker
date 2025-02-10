@@ -22,9 +22,9 @@ jobs:
             docker pull "${image}" --platform "linux/amd64"
             image_name="${image//\//_}"
             image_name="${image_name//:/_}"
-            docker save "${image}" -o "${image_name}-amd64.tar"
-            gzip -c "${image_name}-amd64.tar" > "${image_name}-amd64.tar.gz"
-            rm "${image_name}-amd64.tar"
+            docker save "${image}" -o "${image_name}.tar"
+            gzip -c "${image_name}.tar" > "${image_name}.tar.gz"
+            rm "${image_name}.tar"
           done
       - name: List generated files (debug step)
         run: |
