@@ -42,6 +42,7 @@ jobs:
         if: github.event.inputs.OS_ARCH == 'arch'
         uses: docker/build-push-action@v6
         with:
+          context: ./linux
           file: ./linux/Dockerfile.arch
           platforms: amd64
           push: true
@@ -50,6 +51,7 @@ jobs:
         if: github.event.inputs.OS_ARCH == 'debian'
         uses: docker/build-push-action@v6
         with:
+          context: ./linux
           file: ./linux/Dockerfile.debian
           platforms: amd64
           push: true
@@ -58,6 +60,7 @@ jobs:
         if: github.event.inputs.OS_ARCH == 'ubuntu'
         uses: docker/build-push-action@v6
         with:
+          context: ./linux
           file: ./linux/Dockerfile.ubuntu
           platforms: amd64
           push: true
