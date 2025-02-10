@@ -41,7 +41,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ env.RELEASE_NAME }}
-          tag: TeXLive-Archive-latest
+          tag: Docker Images
           body: |
             ### Images
           artifacts: "${{ github.workspace }}/*.tar.gz"
