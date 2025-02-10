@@ -10,7 +10,11 @@ on:
 
 jobs:
   pull_and_package:
+    name: save docker image
     runs-on: ubuntu-latest
+    permissions:
+      # 赋予写入的权限，否则无法发布release
+      contents: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -33,23 +37,11 @@ jobs:
           # 上海时区
           release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Build')
           echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
-      - name: Create GitHub Release
-        uses: softprops/action-gh-release@master
+      - name: Release
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: DockerTarBuilder-AMD64
-          name: ${{ env.RELEASE_NAME }} for x86-64
+          name: ${{ env.RELEASE_NAME }}
+          tag: TeXLive-Archive-latest
           body: |
-            ### How to use? For example
-            `docker load -i alpine_latest.tar.gz `
-          draft: false
-          prerelease: false
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Upload Docker images as release assets
-        uses: softprops/action-gh-release@v2.1.0
-        with:
-          tag_name: DockerTarBuilder-AMD64
-          files: ${{ github.workspace }}/*.tar.gz
-          token: ${{ secrets.GITHUB_TOKEN }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            ### Images
+          artifacts: "${{ github.workspace }}/*.tar.gz"
