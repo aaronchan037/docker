@@ -10,9 +10,9 @@ on:
         description: "Please type tag of the docker image"
         required: true
         default: "latest"
-  schedule:
-    # 每月5号14:30分开始执行（北京时间+8）
-    - cron: "30 14 5 * *"
+  # schedule:
+  #   # 每月5号14:30分开始执行（北京时间+8）
+  #   - cron: "30 14 5 * *"
 
 jobs:
   docker_base_image:
