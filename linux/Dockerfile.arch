@@ -1,0 +1,10 @@
+FROM archlinux:latest
+LABEL maintainer="Aaron Chan <zwchen037@gmail.com>"
+
+# Update
+RUN pacman -Syu --noconfirm --needed \
+    git wget curl \
+    && pacman -Scc --noconfirm
+
+WORKDIR /workspace
+CMD ["bash"]

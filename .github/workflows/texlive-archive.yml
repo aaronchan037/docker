@@ -1,0 +1,50 @@
+name: TeXLive Archive
+
+on:
+  workflow_dispatch:
+  schedule:
+    # 每年3月14号17:30分开始执行（北京时间+8）
+    - cron: "30 17 14 3 *"
+
+jobs:
+  download_and_release:
+    name: TeXLive latest archive (release)
+    runs-on: ubuntu-latest
+    permissions:
+      # 赋予写入的权限，否则无法发布release
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      - name: Download TeXLive latest ISO file
+        env:
+          # 自适应的TeXLive镜像地址
+          TL_URL: http://mirror.ctan.org
+          # TeXLive镜像文件名 (最好不要带有年份，因为这样每次都是最新的)
+          TL_FILE: texlive.iso
+        run: |
+          # 静默下载TeXLive镜像 (避免在终端输出大量日志)
+          wget -cq "${TL_URL}/systems/texlive/Images/${TL_FILE}"
+      - name: tar and gzip file list
+        run: |
+          tar -cvf - texlive.iso | split -b 1970m - texlive.tar.part
+          for part in texlive.tar.part*; do
+            gzip -f "$part"
+          done
+      - name: List generated files (debug step)
+        run: |
+          find $GITHUB_WORKSPACE -name "*.tar.part*.gz"
+          # 以上海时区作为发布时间
+          release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Archive')
+          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          tag: TeXLive-Archive-latest
+          body: |
+            ### Archive
+            - TeXLive2024
+            #### How to use this archive?
+            To download all files: `texlive.tar.part*.gz`
+          artifacts: "${{ github.workspace }}/*.tar.part*.gz"
