@@ -27,6 +27,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./texlive
+          file: ./texlive/Dockerfile
           platforms: amd64
           push: true
           tags: "${USERNAME}/${DOCKER_REPO}:${DOCKER_TAG}"
