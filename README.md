@@ -1,8 +1,10 @@
 # Aaron's Docker
 
+This is my `Dockerfile` repository. All images in latest release.
+
 ## TeXLive
 
-[the latest version of Docker hub](https://hub.docker.com/r/chanzz0/texlive)
+[Docker hub](https://hub.docker.com/r/chanzz0/texlive)
 
 - Based on Debian latest Image
 - Languages: Chinese, English

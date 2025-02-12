@@ -3,9 +3,6 @@ name: Linux
 on:
   workflow_dispatch:
     inputs:
-      OS_ARCH:
-        description: "Build OS for specific architecture (arch, debian, ubuntu)"
-        required: false
       DOCKER_TAG:
         description: "Please type tag of the docker image"
         required: true
@@ -38,17 +35,7 @@ jobs:
             # 定时任务传递变量为latest
             echo "DOCKER_TAG=latest" >> $GITHUB_ENV
           fi
-      - name: Arch Linux
-        if: github.event.inputs.OS_ARCH == 'arch'
-        uses: docker/build-push-action@v6
-        with:
-          context: ./linux
-          file: ./linux/Dockerfile.arch
-          platforms: amd64
-          push: true
-          tags: "chanzz0/arch:${{ env.DOCKER_TAG }}"
       - name: Debian
-        if: github.event.inputs.OS_ARCH == 'debian'
         uses: docker/build-push-action@v6
         with:
           context: ./linux
@@ -56,13 +43,3 @@ jobs:
           platforms: amd64
           push: true
           tags: "chanzz0/debian:${{ env.DOCKER_TAG }}"
-      - name: Ubuntu
-        if: github.event.inputs.OS_ARCH == 'ubuntu'
-        uses: docker/build-push-action@v6
-        with:
-          context: ./linux
-          file: ./linux/Dockerfile.ubuntu
-          platforms: amd64
-          push: true
-          tags: "chanzz0/ubuntu:${{ env.DOCKER_TAG }}"
-

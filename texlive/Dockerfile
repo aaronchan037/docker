@@ -21,7 +21,6 @@ ARG TL_URL=http://mirror.ctan.org
 # 下载并安装 TeXLive
 RUN wget -q ${TL_URL}/systems/texlive/tlnet/install-tl-unx.tar.gz \
   && tar -xzf install-tl-unx.tar.gz && rm install-tl-unx.tar.gz \
-  # 输出到日志文件，避免终端输出大量日志
   && ./install-tl-*/install-tl --profile=texlive.profile --repository=${TL_URL}/systems/texlive/tlnet \
   && rm -rf install-tl-*
 

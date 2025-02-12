@@ -1,5 +1,5 @@
 
-
+# TeXLive 的iso镜像文件
 ######## 可用 ########
 # 分卷打包并压缩
 tar -cvf - texlive.iso | split -b 1970m - texlive.tar.part
