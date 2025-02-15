@@ -7,7 +7,7 @@ ENV LANG=C.UTF-8 \
 
 RUN apt-get update \
   && apt-get install -y \
-    wget perl fontconfig make xz-utils bzip2 ca-certificates curl python3 \
+  wget perl fontconfig make xz-utils bzip2 ca-certificates curl python3 \
   && apt-get clean \
   && rm -rf /var/lib/apt/lists/*
 
@@ -30,7 +30,7 @@ ENV PATH="/usr/local/texlive/${TL_VERSION}/bin/${ARCH}:$PATH"
 # 更新 TeXLive 包管理器和安装字体相关的 TeX 包
 RUN tlmgr update --self --all \
   && tlmgr install tex-gyre droid cm-unicode roboto junicode lm qualitype arphic-ttf fandol \
-  && (luaotfload-tool -u || true) \
-  && (cp "$(find /usr/local/texlive -name texlive-fontconfig.conf)" /etc/fonts/conf.d/09-texlive-fonts.conf || true) \
+  && luaotfload-tool -u \
+  && cp "$(find /usr/local/texlive -name texlive-fontconfig.conf)" /etc/fonts/conf.d/09-texlive-fonts.conf \
   && fc-cache -fsv \
   && tex -v && latex -v && bibtex -v && xetex -v && pdftex -v && luatex -v
