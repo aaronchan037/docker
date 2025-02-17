@@ -1,5 +1,6 @@
-FROM debian:latest
-LABEL maintainer="Aaron Chan <zwchen037@gmail.com>"
+# latest是最新的稳定版本，stable是滚动的稳定版本
+FROM debian:stable
+LABEL maintainer="Aaron Chan <cs.yelling123@passinbox.com>"
 
 ENV LANG=C.UTF-8 \
   LC_ALL=C.UTF-8 \
