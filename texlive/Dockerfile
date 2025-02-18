@@ -17,6 +17,7 @@ COPY texlive.profile .
 ARG TL_VERSION=2024 ARCH=x86_64-linux
 # 官方源地址：http://ctan.net
 # 自适应镜像源：http://mirror.ctan.org
+# 阿里云镜像源：https://mirrors.aliyun.com/CTAN
 ARG TL_URL=http://mirror.ctan.org
 
 # 下载并安装 TeXLive
