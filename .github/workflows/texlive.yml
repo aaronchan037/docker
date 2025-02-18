@@ -7,10 +7,6 @@ jobs:
   build_docker_images:
     name: TeXLive (Docker)
     runs-on: ubuntu-latest
-    env:
-      username: chanzz0
-      docker_repo: texlive
-      docker_tag: latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,10 +26,10 @@ jobs:
           file: ./texlive/Dockerfile
           platforms: amd64
           push: true
-          tags: "${username}/${docker_repo}:${docker_tag}"
+          tags: "chanzz0/texlive:latest"
       - name: Save images and gzip files
         run: |
-          docker save "${username}/${docker_repo}:${docker_tag}" -o texlive.tar
+          docker save "chanzz0/texlive:latest" -o texlive.tar
           gzip -f texlive.tar
       - name: List generated files (debug step)
         run: |
