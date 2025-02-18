@@ -28,16 +28,7 @@ jobs:
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      # - name: Test Docker Images
-      #   uses: docker/build-push-action@v6
-      #   with:
-      #     # Dockerfile dir
-      #     context: ./test
-      #     platforms: amd64
-      #     push: true
-      #     # Docker hub tag name
-      #     tags: "chanzz0/test:${{ github.event.inputs.DOCKER_TAG }}"
-      - name: (Test) TeX Live
+      - name: Test
         uses: docker/build-push-action@v6
         with:
           context: ./texlive
