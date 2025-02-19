@@ -39,7 +39,7 @@ jobs:
         uses: ncipollo/release-action@v1
         with:
           name: ${{ env.RELEASE_NAME }}
-          tags: DockerImages
+          tag: DockerImages
           body: |
             ### Images
           artifacts: "${{ github.workspace }}/*.tar.gz"
