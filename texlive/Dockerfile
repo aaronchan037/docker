@@ -32,7 +32,7 @@ ENV PATH="/usr/local/texlive/${TL_VERSION}/bin/${ARCH}:$PATH"
 # 更新 TeXLive 包管理器和安装字体相关的 TeX 包
 RUN tlmgr update --self --all \
   && tlmgr install tex-gyre droid cm-unicode roboto junicode lm qualitype arphic-ttf fandol \
-  && luaotfload-tool -u \
+  && luaotfload-tool -update \
   && cp "$(find /usr/local/texlive -name texlive-fontconfig.conf)" /etc/fonts/conf.d/09-texlive-fonts.conf \
   && fc-cache -fsv \
   && tex -v && latex -v && bibtex -v && xetex -v && pdftex -v && luatex -v

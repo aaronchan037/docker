@@ -2,15 +2,14 @@ name: TeXLive
 
 on:
   workflow_dispatch:
+  schedule:
+    # 每天0:37分开始执行（北京时间+8）
+    - cron: "37 0 * * *"
 
 jobs:
   build_docker_images:
     name: TeXLive (Docker)
     runs-on: ubuntu-latest
-    permissions:
-      # 赋予写入的权限，否则无法发布release
-      contents: write
-      package: write
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -30,21 +29,22 @@ jobs:
           file: ./texlive/Dockerfile
           platforms: amd64
           push: true
-          tags: "chanzz0/texlive:latest ghcr.io/aaronchan037/texlive:latest"
-      - name: Save images and gzip files
-        run: |
-          docker save "chanzz0/texlive:latest" -o texlive.tar
-          gzip -f texlive.tar
-      - name: List generated files (debug step)
-        run: |
-          find $GITHUB_WORKSPACE -name "*.tar.gz"
-          # 以上海时区作为发布时间
-          release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d Build Docker images')
-          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
-      - name: Release
-        uses: ncipollo/release-action@v1
-        with:
-          name: ${{ env.RELEASE_NAME }}
-          body: |
-            ### Docker images
-          artifacts: "${{ github.workspace }}/*.tar.gz"
+          tags: "chanzz0/texlive:latest"
+      # - name: Save images and gzip files
+      #   run: |
+      #     docker save "chanzz0/texlive:latest" -o texlive.tar
+      #     gzip -f texlive.tar
+      # - name: List generated files (debug step)
+      #   run: |
+      #     find $GITHUB_WORKSPACE -name "*.tar.gz"
+      #     # 以上海时区作为发布时间
+      #     release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d Build Docker images')
+      #     echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+      # - name: Release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     name: ${{ env.RELEASE_NAME }}
+      #     tag: TeX Live latest
+      #     body: |
+      #       ### Docker images
+      #     artifacts: "${{ github.workspace }}/*.tar.gz"
