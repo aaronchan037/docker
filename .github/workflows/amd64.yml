@@ -1,37 +1,82 @@
-name: amd64 (2GB-5GB)
+name: amd64
 
 on:
   workflow_dispatch:
     inputs:
+      save_path:
+        description: "less than 2GB to release, and 2GB-5GB to artifact"
+        required: true
+        default: "release"
       docker_images:
         description: "Please type Docker images name"
         required: true
-        default: "alpine:latest,busybox:stable-glibc"
+        default: "alpine:latest,alpine/curl,busybox:stable-glibc"
 
 jobs:
-  pull_and_package:
+  release_jobs:
+    name: save release
+    if: ${{ github.event.inputs.save_path == 'release' }}
+    runs-on: ubuntu-latest
+    permissions:
+      # 赋予写入的权限，否则无法发布release
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Clean up Docker to free space
+        run: |
+          docker system prune -a -f
+          docker volume prune -f
+      - name: Pull Docker Images
+        run: |
+          images="${{ github.event.inputs.docker_images }}"
+          IFS=',' read -r -a image_array <<< "$images"
+          for image in "${image_array[@]}"; do
+            docker pull "${image}" --platform "linux/amd64"
+            image_name="${image//\//_}"
+            image_name="${image_name//:/_}"
+            docker save "${image}" -o "${image_name}.tar"
+            gzip -f "${image_name}.tar"
+          done
+      - name: List generated files (debug step)
+        run: |
+          find $GITHUB_WORKSPACE -name "*.tar.gz"
+          # 上海时区
+          release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Build')
+          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+      - name: Release
+        uses: ncipollo/release-action@v1
+        with:
+          name: ${{ env.RELEASE_NAME }}
+          tag: DockerImages
+          body: |
+            ### Images
+          artifacts: "${{ github.workspace }}/*.tar.gz"
+
+  artifact_jobs:
+    name: save artifact
+    if: ${{ github.event.inputs.save_path == 'artifact' }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Clean up Docker to free space
         run: |
-            docker system prune -a -f
-            docker volume prune -f
-      - name: Pull Docker Images and Package
+          docker system prune -a -f
+          docker volume prune -f
+      - name: Pull Docker Images
         run: |
           images="${{ github.event.inputs.docker_images }}"
-            IFS=',' read -r -a image_array <<< "$images"
-            for image in "${image_array[@]}"; do
-              docker pull "${image}" --platform "linux/amd64"
-              image_name="${image//\//_}"
-              image_name="${image_name//:/_}"
-              docker save "${image}" -o "${image_name}.tar"
-              gzip -c "${image_name}.tar" > "${image_name}.tar.gz"
-              rm "${image_name}.tar"
-            done
-      - name: Upload artifact
-        uses: actions/upload-artifact@v4
+          IFS=',' read -r -a image_array <<< "$images"
+          for image in "${image_array[@]}"; do
+            docker pull "${image}" --platform "linux/amd64"
+            image_name="${image//\//_}"
+            image_name="${image_name//:/_}"
+            docker save "${image}" -o "${image_name}.tar"
+            gzip -f "${image_name}.tar"
+          done
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
         with:
           name: my-artifact
           path: ${{ github.workspace }}/*.tar.gz
