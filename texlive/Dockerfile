@@ -1,5 +1,5 @@
-# latest是最新的稳定版本，stable是滚动的稳定版本
-FROM debian:stable
+# latest是最新的稳定版本，stable是滚动的稳定版本(推荐)
+FROM debian:latest
 LABEL maintainer="Aaron Chan <cs.yelling123@passinbox.com>"
 
 ENV LANG=C.UTF-8 \

@@ -1,3 +1,3 @@
-FROM archlinux:latest
+FROM ubuntu:latest
 
-RUN pacman -Syu --noconfirm
+RUN apt-get update
