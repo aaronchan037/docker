@@ -40,8 +40,8 @@ jobs:
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          name: ${{ env.TL_VERSION }}
-          tag: TeXLive-Archive-${{ env.TL_VERSION }}
+          name: TeXLive-Archive-latest
+          tag: TeXLive-${{ env.TL_VERSION }}
           body: |
             ### Archive
             - texlive.iso
