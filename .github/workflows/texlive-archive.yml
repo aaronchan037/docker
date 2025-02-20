@@ -35,16 +35,16 @@ jobs:
         run: |
           find $GITHUB_WORKSPACE -name "*.tar.part*.gz"
           # 以上海时区作为发布时间
-          release_name=$(TZ="Asia/Shanghai" date +'%Y-%m-%d %H:%M Archive')
-          echo "RELEASE_NAME=$release_name" >> $GITHUB_ENV
+          texlive_version=$(TZ="Asia/Shanghai" date +'%Y')
+          echo "TL_VERSION=$texlive_version" >> $GITHUB_ENV
       - name: Release
         uses: ncipollo/release-action@v1
         with:
-          name: ${{ env.RELEASE_NAME }}
-          tag: TeXLive-Archive-latest
+          name: ${{ env.TL_VERSION }}
+          tag: TeXLive-Archive-${{ env.TL_VERSION }}
           body: |
             ### Archive
-            - TeXLive2024
+            - texlive.iso
             #### How to use this archive?
             To download all files: `texlive.tar.part*.gz`
           artifacts: "${{ github.workspace }}/*.tar.part*.gz"
