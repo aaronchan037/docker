@@ -14,8 +14,8 @@ on:
 
 jobs:
   release_jobs:
-    name: save release
     if: ${{ github.event.inputs.save_path == 'release' }}
+    name: Save Release
     runs-on: ubuntu-latest
     permissions:
       # 赋予写入的权限，否则无法发布release
@@ -48,8 +48,8 @@ jobs:
           artifacts: "${{ github.workspace }}/*.tar.gz"
 
   artifact_jobs:
-    name: save artifact
     if: ${{ github.event.inputs.save_path == 'artifact' }}
+    name: Save GitHub Action Artifact
     runs-on: ubuntu-latest
     steps:
       - name: Pull Docker Images

@@ -12,9 +12,9 @@ on:
           - image
           - iso
   schedule:
-    # 每年3月14号17:30分开始执行（北京时间+8）
+    # 每年3月14号17:30分执行（北京时间+8）
     - cron: "30 17 14 3 *"
-    # 每周一的0:37分开始执行（北京时间+8）
+    # 每周一的0:37分执行（北京时间+8）
     - cron: "37 0 * * 1"
 
 jobs:
@@ -78,7 +78,7 @@ jobs:
 
   push_mirrors:
     if: ${{ success() }}
-    needs: [save_docker_images]
+    needs: [build_docker_images]
     name: Push to Mirror Repository
     runs-on: ubuntu-latest
     steps:
@@ -94,7 +94,6 @@ jobs:
       - name: Coding
         run: |
           coding_url="g-zekw7514-docker.pkg.coding.net"
-          docker login -u ${coding_username} -p ${coding_token} $coding_url
           # TeXLive
           docker tag chanzz0/texlive $coding_url/docker/backup/texlive:latest
           docker push $coding_url/docker/backup/texlive:latest
@@ -107,7 +106,6 @@ jobs:
       - name: cnb
         run: |
           cnb_url="docker.cnb.cool"
-          docker login -u cnb -p ${cnb_token} $cnb_url
           # TeXLive
           docker tag chanzz0/texlive $cnb_url/cnb-docker/docker/texlive:latest
           docker push $cnb_url/cnb-docker/docker/texlive:latest
