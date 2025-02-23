@@ -49,10 +49,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.WORKFLOW_TOKEN }}
       - name: GitHub
+        env:
+          github_username: aaronchan037
         run: |
           github_url="ghcr.io"
-          docker tag chanzz0/texlive $github_url/us-git/docker/texlive
-          docker push $github_url/us-git/docker/texlive
+          docker tag chanzz0/texlive $github_url/${github_username}/texlive
+          docker push $github_url/${github_username}/texlive
 
   inside:
     if: >-
