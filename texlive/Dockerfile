@@ -14,7 +14,7 @@ RUN apt-get update \
 
 COPY texlive.profile .
 
-ARG TL_VERSION=2024 ARCH=x86_64-linux
+ARG TL_VERSION=2025 ARCH=x86_64-linux
 # 官方源地址：http://ctan.net
 # 自适应镜像源：http://mirror.ctan.org
 # 阿里云镜像源：https://mirrors.aliyun.com/CTAN
