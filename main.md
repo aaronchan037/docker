@@ -1,9 +1,7 @@
-## Docker
-
-### 测试
+## Containers Repository
 
 - TeXLive
 
-### 定时任务
+### Schedule
 
-- TeXLive update: 托管在腾讯云上（每月一次）
+- TeXLive: 国内平台 cnb 上（每月更新一次）
