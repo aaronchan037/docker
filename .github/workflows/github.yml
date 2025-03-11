@@ -1,37 +1,13 @@
-name: Mirror
+name: GitHub Containers
 
 on:
   workflow_dispatch:
-    inputs:
-      gitlab:
-        description: "Push GitLab"
-        type: boolean
-        required: true
-        default: false
-      github:
-        description: "Push GitHub"
-        type: boolean
-        required: true
-        default: false
-      coding:
-        description: "Push Coding"
-        type: boolean
-        required: true
-        default: false
-      cnb:
-        description: "Push cnb"
-        type: boolean
-        required: true
-        default: false
   schedule:
     # 每月3号2:37分开始执行（北京时间+8）
     - cron: "37 2 3 * *"
 
 jobs:
   build:
-    if: >-
-      github.event.inputs ||
-      github.event.schedule
     runs-on: ubuntu-latest
     permissions:
       packages: write
@@ -50,7 +26,6 @@ jobs:
           username: aaron-git
           password: ${{ secrets.GITLAB_TOKEN }}
       - name: GitLab
-        if: inputs.gitlab
         run: |
           gitlab_url="registry.gitlab.com"
           docker tag chanzz0/texlive $gitlab_url/us-git/docker/texlive
@@ -62,7 +37,6 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.WORKFLOW_TOKEN }}
       - name: GitHub
-        if: inputs.github
         env:
           github_username: aaronchan037
         run: |
@@ -80,7 +54,6 @@ jobs:
           username: ${{ secrets.CODING_USERNAME }}
           password: ${{ secrets.CODING_TOKEN }}
       - name: Coding
-        if: inputs.coding
         run: |
           coding_url="g-zekw7514-docker.pkg.coding.net"
           # Debian
@@ -93,7 +66,6 @@ jobs:
           username: cnb
           password: ${{ secrets.CNB_TOKEN }}
       - name: cnb
-        if: inputs.cnb
         run: |
           cnb_url="docker.cnb.cool"
           # Debian

@@ -1,6 +1,6 @@
-# Aaron's Containers
+# Containerfiles repository
 
-This is my Containers repository. All images default the latest release version.
+This is a repo to hold various Containerfiles for images I create.
 
 ## TeX Live
 

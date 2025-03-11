@@ -26,15 +26,15 @@ on:
     # - cron: "30 17 14 3 *"
     # 每周一的0:37分执行（北京时间+8）
     - cron: "37 0 * * 1"
-  push:
-    branches: [main]
+  # push:
+  #   branches: [main]
 
 jobs:
   build_docker_images:
     if: >-
       github.event.inputs.task == 'image' ||
       github.event.schedule == '37 0 * * 1' ||
-      push.event.branch == 'main'
+      github.event_name == 'push'
     name: Build TeXLive Container Image
     runs-on: ubuntu-latest
     steps:
@@ -87,6 +87,9 @@ jobs:
             ### Docker images
             TeXLive Docker Image
           artifacts: "${{ github.workspace }}/*.tar.gz"
+          allowUpdates: true
+          omitNameDuringUpdate: true
+          omitBodyDuringUpdate: true
       - name: Upload Artifact
         if: inputs.artifact
         uses: actions/upload-artifact@v4
